@@ -37,9 +37,7 @@ void setup(){
   // --------------- Starting serial @ 115200 -------------------- //
   Serial.begin(115200);
   while(!Serial);
-
-  Serial.print("{SGS:2;F:LOG,GCS Alpha connected on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
-  //Serial.println("Started setup @RHChannel_" + String(RH_CHANNEL_LOCAL));
+  Serial.print("{SGS:2;F:LOG,GCS Alpha started on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
 
   // --------------- Force RFM95W reset -------------------- //
   digitalWrite(PIN_RH_RST, LOW);
@@ -49,21 +47,24 @@ void setup(){
 
   // --------------- Initializing RH_Datagram -------------------- //
   if(!RHNetwork.init()){
-    Serial.println("ERR: 11 -> RHNetwork INIT failed. Did you assign the right pins?");
+    Serial.print("{STR:0;}");
     while(1);
   }
+  Serial.print("{STR:2;}");
 
   // --------------- Setting RH_Driver frequency -------------------- //
 
   if(!RHDriver.setFrequency(RHDriverFreq)){
-    Serial.println("ERR: 12 -> RHDriver setFrequency failed. Check the connection with the radio chip.");
+    //Serial.println("ERR: 12 -> RHDriver setFrequency failed. Check the connection with the radio chip.");
+    Serial.print("{SGF:0;}");
     while(1);
-    //exit(12);
   }
+  Serial.print("{SGF:2;F:LOG,Frequency set to: "); Serial.print(RF_FREQ); Serial.print("MHz;}");
 
   // --------------- Setting RH_Driver TxPower to 23 (maximum) -------------------- //
 
   RHDriver.setTxPower(23, false);
+  Serial.print("{SGP:2;}");
 
   // --------------- Setting #retries for RH_Datagram -------------------- //
 
