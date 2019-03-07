@@ -25,21 +25,27 @@ const float RHDriverFreq = 868.0;   // RHDriver Frequency
 RH_RF95 RHDriver(PIN_RH_CS, PIN_RH_INT);
 RHReliableDatagram RHNetwork(RHDriver, RH_CHANNEL_LOCAL);
 
-
-
-
-
-
 //
 // SETUP FUNCTION
 //
 
 void setup(){
+  // --------------- Set RF reset HIGH -------------------- //
+  pinMode(PIN_RH_RST, OUTPUT);
+  digitalWrite(PIN_RH_RST, HIGH);
+
   // --------------- Starting serial @ 115200 -------------------- //
   Serial.begin(115200);
   while(!Serial);
 
-  Serial.println("Started setup @RHChannel_" + String(RH_CHANNEL_LOCAL));
+  Serial.print("{SGS:2;F:LOG,GCS Alpha connected on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
+  //Serial.println("Started setup @RHChannel_" + String(RH_CHANNEL_LOCAL));
+
+  // --------------- Force RFM95W reset -------------------- //
+  digitalWrite(PIN_RH_RST, LOW);
+  delay(10);
+  digitalWrite(PIN_RH_RST, HIGH);
+  delay(10);
 
   // --------------- Initializing RH_Datagram -------------------- //
   if(!RHNetwork.init()){
@@ -126,4 +132,3 @@ void loop(){
     Serial.print((char*) BUF);
   }
 }
-
