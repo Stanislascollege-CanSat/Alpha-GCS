@@ -47,10 +47,10 @@ void setup(){
 
   // --------------- Initializing RH_Datagram -------------------- //
   if(!RHNetwork.init()){
-    Serial.print("{STR:0;}");
+    Serial.print("{SGR:0;}");
     while(1);
   }
-  Serial.print("{STR:2;}");
+  Serial.print("{SGR:2;}");
 
   // --------------- Setting RH_Driver frequency -------------------- //
 
@@ -59,7 +59,7 @@ void setup(){
     Serial.print("{SGF:0;}");
     while(1);
   }
-  Serial.print("{SGF:2;F:LOG,Frequency set to: "); Serial.print(RF_FREQ); Serial.print("MHz;}");
+  Serial.print("{SGF:2;F:LOG,Frequency set to: "); Serial.print(RHDriverFreq); Serial.print("MHz;}");
 
   // --------------- Setting RH_Driver TxPower to 23 (maximum) -------------------- //
 
@@ -111,12 +111,26 @@ void loop(){
 
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
     for(String s : commandList){
-      if(s.equals("testcom")){
+      if (s.equals("testcom")){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
-      }else{
-        Serial.print("Received invalid command: " + s);
+      } else if (s.equals("SAD")) {
+        Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("DEP")) {
+        Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("OPR")) {
+        Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("CLR")) {
+        Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("OPP")) {
+        Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("CLP")) {
+        Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("IDE")) {
+        Serial.print("{F:LOG,"+ s + ";}");
+      } else {
+        Serial.print("{F:ERR,Received invalid command: " + s + ";}");
       }
     }
   }//End: if(Serial.available()){
