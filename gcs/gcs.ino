@@ -129,6 +129,8 @@ void loop(){
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("IDE")) {
         Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("RER")){
+        Serial.print("{F:LOG,"+ s + ";}");
       } else {
         Serial.print("{F:ERR,Received invalid command: " + s + ";}");
       }
