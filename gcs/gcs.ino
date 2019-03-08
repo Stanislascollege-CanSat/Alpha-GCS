@@ -137,8 +137,6 @@ void loop(){
     }
   }//End: if(Serial.available()){
 
-
-
   uint8_t BUF[RH_RF95_MAX_MESSAGE_LEN] = "";
   uint8_t LEN = sizeof(BUF);
   uint8_t FROM_ADDRESS;
@@ -146,6 +144,6 @@ void loop(){
 
 
   if(RHNetwork.recvfromAck(BUF, &LEN, &FROM_ADDRESS, &TO_ADDRESS)){
-    Serial.print((char*) BUF);
+    Serial.println((char*) BUF);
   }
 }
