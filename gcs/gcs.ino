@@ -4,7 +4,6 @@
 #include <RH_RF95.h>
 #include <RHReliableDatagram.h>
 
-
 // RADIO CHANNELS
 const unsigned short int RH_CHANNEL_GS_ALPHA = 1;   //
 const unsigned short int RH_CHANNEL_GS_DELTA = 2;   //
@@ -73,15 +72,12 @@ void setup(){
   // --------------- Setting duration timeout for RH_Datagram -------------------- //
 
   RHNetwork.setTimeout(0);
+
 }
-
-
 
 //
 // LOOP FUNCTION
 //
-
-
 
 void loop(){
   // RECEIVE COMMAND FROM COMPUTER
@@ -116,20 +112,28 @@ void loop(){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
       } else if (s.equals("SAD")) {
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("DEP")) {
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("OPR")) {
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("CLR")) {
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("OPP")) {
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("CLP")) {
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("IDE")) {
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("RER")){
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         Serial.print("{F:LOG,"+ s + ";}");
       } else {
         Serial.print("{F:ERR,Received invalid command: " + s + ";}");
@@ -141,7 +145,6 @@ void loop(){
   uint8_t LEN = sizeof(BUF);
   uint8_t FROM_ADDRESS;
   uint8_t TO_ADDRESS;
-
 
   if(RHNetwork.recvfromAck(BUF, &LEN, &FROM_ADDRESS, &TO_ADDRESS)){
     Serial.println((char*) BUF);
