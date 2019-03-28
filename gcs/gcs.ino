@@ -4,7 +4,6 @@
 #include <RH_RF95.h>
 #include <RHReliableDatagram.h>
 
-
 // RADIO CHANNELS
 const unsigned short int RH_CHANNEL_GS_ALPHA = 1;   //
 const unsigned short int RH_CHANNEL_GS_DELTA = 2;   //
@@ -37,7 +36,7 @@ void setup(){
   // --------------- Starting serial @ 115200 -------------------- //
   Serial.begin(115200);
   while(!Serial);
-  Serial.print("{SGS:2;F:LOG,GCS Alpha started on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
+  Serial.print("{SGS:2;F:LOG,[GCS] Alpha started on @RHchannel "+ String(RH_CHANNEL_LOCAL)+";}");
 
   // --------------- Force RFM95W reset -------------------- //
   digitalWrite(PIN_RH_RST, LOW);
@@ -59,7 +58,7 @@ void setup(){
     Serial.print("{SGF:0;}");
     while(1);
   }
-  Serial.print("{SGF:2;F:LOG,Frequency set to: "); Serial.print(RHDriverFreq); Serial.print("MHz;}");
+  Serial.print("{SGF:2;F:LOG,[GCS] Frequency set to: "); Serial.print(RHDriverFreq); Serial.print("MHz;}");
 
   // --------------- Setting RH_Driver TxPower to 23 (maximum) -------------------- //
 
@@ -73,15 +72,12 @@ void setup(){
   // --------------- Setting duration timeout for RH_Datagram -------------------- //
 
   RHNetwork.setTimeout(0);
+
 }
-
-
 
 //
 // LOOP FUNCTION
 //
-
-
 
 void loop(){
   // RECEIVE COMMAND FROM COMPUTER
@@ -129,29 +125,20 @@ void loop(){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
       } else if (s.equals("DEP")) {
-        //Serial.print("{F:LOG,"+ s + ";}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
       } else if (s.equals("OPR")) {
-        //Serial.print("{F:LOG,"+ s + ";}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
       } else if (s.equals("CLR")) {
-        //Serial.print("{F:LOG,"+ s + ";}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
       } else if (s.equals("OPP")) {
-        //Serial.print("{F:LOG,"+ s + ";}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
       } else if (s.equals("CLP")) {
-        //Serial.print("{F:LOG,"+ s + ";}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("IDE")) {
-        //Serial.print("{F:LOG,"+ s + ";}");
-      } else if (s.equals("RER")){
-        //Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("FLIGHT_MODE")){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
@@ -159,19 +146,14 @@ void loop(){
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
-      } else {
-        //Serial.print("{F:ERR,Received invalid command: " + s + ";}");
       }
     }
   }//End: if(Serial.available()){
-
-
 
   uint8_t BUF[RH_RF95_MAX_MESSAGE_LEN] = "";
   uint8_t LEN = sizeof(BUF);
   uint8_t FROM_ADDRESS;
   uint8_t TO_ADDRESS;
-
 
   if(RHNetwork.recvfromAck(BUF, &LEN, &FROM_ADDRESS, &TO_ADDRESS)){
     Serial.print((char*) BUF);
