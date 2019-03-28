@@ -68,7 +68,7 @@ void setup(){
 
   // --------------- Setting #retries for RH_Datagram -------------------- //
 
-  RHNetwork.setRetries(0);
+  RHNetwork.setRetries(2);
 
   // --------------- Setting duration timeout for RH_Datagram -------------------- //
 
@@ -111,28 +111,56 @@ void loop(){
 
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
     for(String s : commandList){
+      Serial.println("{F:LOG,Received... " + s + ";}");
       if (s.equals("testcom")){
+        //Serial.println("testcom");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
+        RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
+        RHNetwork.waitPacketSent();
       } else if (s.equals("SAD")) {
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
+        RHNetwork.waitPacketSent();
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
+        RHNetwork.waitPacketSent();
       } else if (s.equals("DEP")) {
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
       } else if (s.equals("OPR")) {
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
       } else if (s.equals("CLR")) {
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
       } else if (s.equals("OPP")) {
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
       } else if (s.equals("CLP")) {
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
       } else if (s.equals("IDE")) {
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
       } else if (s.equals("RER")){
-        Serial.print("{F:LOG,"+ s + ";}");
+        //Serial.print("{F:LOG,"+ s + ";}");
+      } else if (s.equals("FLIGHT_MODE")){
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
+        RHNetwork.waitPacketSent();
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
+        RHNetwork.waitPacketSent();
+        RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
+        RHNetwork.waitPacketSent();
       } else {
-        Serial.print("{F:ERR,Received invalid command: " + s + ";}");
+        //Serial.print("{F:ERR,Received invalid command: " + s + ";}");
       }
     }
   }//End: if(Serial.available()){
@@ -148,4 +176,6 @@ void loop(){
   if(RHNetwork.recvfromAck(BUF, &LEN, &FROM_ADDRESS, &TO_ADDRESS)){
     Serial.print((char*) BUF);
   }
+
+  Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
 }
