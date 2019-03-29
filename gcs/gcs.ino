@@ -107,8 +107,9 @@ void loop(){
 
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
     for(String s : commandList){
+      s = "[" + s + "]";
       Serial.println("{F:LOG,Received... " + s + ";}");
-      if (s.equals("testcom")){
+      if (s.equals("[testcom]")){
         //Serial.println("testcom");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
@@ -116,7 +117,7 @@ void loop(){
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("SAD")) {
+      } else if (s.equals("[SAD]")) {
         //Serial.print("{F:LOG,"+ s + ";}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
@@ -124,22 +125,22 @@ void loop(){
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_RHO);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("DEP")) {
+      } else if (s.equals("[DEP]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("OPR")) {
+      } else if (s.equals("[OPR]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("CLR")) {
+      } else if (s.equals("[CLR]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("OPP")) {
+      } else if (s.equals("[OPP]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("CLP")) {
+      } else if (s.equals("[CLP]")) {
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
-      } else if (s.equals("FLIGHT_MODE")){
+      } else if (s.equals("[FLIGHT_MODE]")){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
