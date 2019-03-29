@@ -24,6 +24,9 @@ const float RHDriverFreq = 868.0;   // RHDriver Frequency
 RH_RF95 RHDriver(PIN_RH_CS, PIN_RH_INT);
 RHReliableDatagram RHNetwork(RHDriver, RH_CHANNEL_LOCAL);
 
+bool reading;
+String readCommand;
+
 //
 // SETUP FUNCTION
 //
@@ -73,6 +76,10 @@ void setup(){
 
   RHNetwork.setTimeout(0);
 
+
+  reading = false;
+  readCommand = "";
+
 }
 
 //
@@ -82,19 +89,17 @@ void setup(){
 void loop(){
   // RECEIVE COMMAND FROM COMPUTER
   if(Serial.available()){
-    String reader = Serial.readString();
-    bool reading = false;
-    String readCommand = "";
+    String reader = Serial.readString();  
     std::vector<String> commandList;
     for(int i = 0; i < reader.length(); ++i){
       switch(reader.charAt(i)){
         case '[':
+          readCommand = "";
           reading = true;
           break;
         case ']':
           reading = false;
           commandList.push_back(readCommand);
-          readCommand = "";
           break;
         default:
           if(reading){
@@ -106,9 +111,9 @@ void loop(){
     // GATHERED COMMANDS FROM COMPUTER (format: [command_name]) in std::vector<String> commandList.
 
     // CYCLING THROUGH commandList AND EXECUTING ALL COMMANDS
-    for(String s : commandList){
-      s = "[" + s + "]";
-      Serial.println("{F:LOG,Received... " + s + ";}");
+    for(String a : commandList){
+      String s = "[" + String(a) + "]";
+      Serial.print("{F:LOG,Received... " + s + ";}");
       if (s.equals("[testcom]")){
         //Serial.println("testcom");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
@@ -141,6 +146,7 @@ void loop(){
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
       } else if (s.equals("[FLIGHT_MODE]")){
+        //Serial.print("{F:LOG,YES;}");
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_MU);
         RHNetwork.waitPacketSent();
         RHNetwork.sendtoWait((uint8_t*)s.c_str(), s.length(), RH_CHANNEL_BETA);
@@ -160,5 +166,5 @@ void loop(){
     Serial.print((char*) BUF);
   }
 
-  Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
+  //Serial.print("{CAN:" + String(RH_CHANNEL_LOCAL) + ";RS:" + String(RHDriver.lastRssi()) + ";}");
 }
